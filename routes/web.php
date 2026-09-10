@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DoctorsController;
 use App\Http\Controllers\FifthTestController;
 use Illuminate\Support\Facades\Route;
 
@@ -53,6 +54,7 @@ Route::post('contact-us', function () {
 
 use App\Http\Controllers\HospitalController;
 use App\Http\Controllers\TestController;
+use App\Models\Doctors;
 
 Route::get('/', function () {
     return view('welcome');
@@ -85,3 +87,14 @@ Route::prefix('details')->group(function () {
 Route::get('invoke', TestController::class);
 
 Route::resource('fifth-test', FifthTestController::class);
+
+Route::get('doctors', function(){
+    return Doctors::all();
+    });
+
+
+Route::get('doctors', [DoctorsController::class, 'index']);
+Route::get('add-doctor', [DoctorsController::class, 'add']);
+Route::get('show-doctor/{id}', [DoctorsController::class, 'show']);
+Route::get('update-doctor/{id}', [DoctorsController::class, 'update']);
+Route::get('delete-doctor/{id}', [DoctorsController::class, 'delete']);
