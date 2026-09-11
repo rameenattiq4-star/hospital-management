@@ -93,8 +93,7 @@ Route::get('doctors', function(){
     });
 
 
-Route::get('doctors', [DoctorsController::class, 'index']);
-Route::get('add-doctor', [DoctorsController::class, 'add']);
-Route::get('show-doctor/{id}', [DoctorsController::class, 'show']);
-Route::get('update-doctor/{id}', [DoctorsController::class, 'update']);
-Route::get('delete-doctor/{id}', [DoctorsController::class, 'delete']);
+Route::get('add-data', [HospitalController::class, 'addData']);
+Route::get('get-data', [HospitalController::class, 'getData']);
+Route::get('update-data', [HospitalController::class, 'updateData']);
+Route::get('delete-data', [HospitalController::class, 'deleteData']);
