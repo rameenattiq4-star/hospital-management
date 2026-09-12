@@ -3,43 +3,46 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Hospital;  // ✅ Yeh import hona chahiye
+use Illuminate\Support\Facades\DB;  // ✅ Yeh bhi
 
 class HospitalController extends Controller
 {
+    public function index()
+    {
+        return 'Hello from the Hospital Controller';
+    }
+
     public function addData()
     {
-        DB::table('hospitals')->insert([
-            'name' => 'tester',
-            'email' => 'tester@gmail.com',
-            'age' => 15,
-            'date_of_birth' => '2010-01-01',
-            'gender' => 'm'
-        ]);
+        $item = new Hospital();
+        $item->name = 'tester';
+        $item->email = 'tester@gmail.com';
+        $item->age = 25;
+        $item->date_of_birth = '2010-01-01';
+        $item->gender = 'f';
+        $item->save();
 
         return 'added successfully';
     }
 
-    public function getData()
-{
-    $items = DB::table('hospitals')->get();
+    public function updateData()
+    {
+        $item = Hospital::find(1);
 
-    return $items;
-}
+        if ($item) {
+            $item->name = 'updated student';
+            $item->save();
+            return 'Updated Successfully';
+        }
 
-public function updateData()
-{
-    DB::table('hospitals')->where('id', 104)->update([  
-        'name' => 'Updated Name',
-    ]);
+        return 'Updated Successfully';
+    }
 
-    return 'Updated Successfully';
-}
+    public function deleteData()
+    {
+        DB::table('hospitals')->where('id', 3)->delete();
 
-public function deleteData()
-{
-    DB::table('hospitals')->where('id', 104)->delete();  // ✅ id = 104
-
-    return 'Deleted Successfully';
-}
+        return 'Deleted Successfully';
+    }
 }
