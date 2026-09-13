@@ -3,46 +3,40 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Hospital;  // ✅ Yeh import hona chahiye
-use Illuminate\Support\Facades\DB;  // ✅ Yeh bhi
+use App\Models\Hospital;
+use Illuminate\Support\Facades\DB;
 
 class HospitalController extends Controller
 {
-    public function index()
+    // ✅ Soft delete wale record ko restore karo
+    public function restoreData()
     {
-        return 'Hello from the Hospital Controller';
-    }
-
-    public function addData()
-    {
-        $item = new Hospital();
-        $item->name = 'tester';
-        $item->email = 'tester@gmail.com';
-        $item->age = 25;
-        $item->date_of_birth = '2010-01-01';
-        $item->gender = 'f';
-        $item->save();
-
-        return 'added successfully';
-    }
-
-    public function updateData()
-    {
-        $item = Hospital::find(1);
+        $item = Hospital::withTrashed()->find(1);   
 
         if ($item) {
-            $item->name = 'updated student';
-            $item->save();
-            return 'Updated Successfully';
+            $item->restore();                     
+            return 'Hospital with ID 1 restored successfully';
         }
 
-        return 'Updated Successfully';
+        return 'Hospital with ID 1 not found';     
     }
 
-    public function deleteData()
+    // ✅ Record ko permanently delete karo
+    public function forceDelete()
     {
-        DB::table('hospitals')->where('id', 3)->delete();
+        $item = Hospital::withTrashed()->find(1);   
 
-        return 'Deleted Successfully';
+        if ($item) {
+            $item->forceDelete();                 
+            return 'Hospital permanently deleted';
+        }
+
+        return 'Hospital not found or already permanently deleted';  
     }
+
+    public function app()
+{
+    $hospitals = Hospital::limit(10)->get();   
+    return view('hospital.app', compact('hospitals'));   
+}
 }

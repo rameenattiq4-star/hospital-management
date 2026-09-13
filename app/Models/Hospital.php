@@ -4,14 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;   // ✅ Import karo
 
 class Hospital extends Model
 {
-    use HasFactory; 
+    use HasFactory, SoftDeletes;   
 
     protected $fillable = [
         'name',
         'email',
-        // Baaki columns
+        'age',
+        'date_of_birth',
+        'gender',
+        'score',
     ];
 }
