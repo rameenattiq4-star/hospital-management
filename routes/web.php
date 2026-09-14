@@ -17,3 +17,11 @@ Route::get('delete-data', [HospitalController::class, 'deleteData']);
 
 Route::get('restore-data', [HospitalController::class, 'restoreData']);
 Route::get('force-delete', [HospitalController::class, 'forceDelete']);
+
+Route::get('hospital/add', [HospitalController::class, 'add']);        
+Route::post('hospital/store', [HospitalController::class, 'store']);   
+
+
+Route::get('hospital/edit/{id}', [HospitalController::class, 'edit']);
+Route::post('hospital/update/{id}', [HospitalController::class, 'update']);
+Route::delete('hospital/delete/{id}', [HospitalController::class, 'delete']);
