@@ -6,17 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::table('hospitals', function (Blueprint $table) {
-            $table->softDeletes();
+            $table->string('image')->nullable(true);
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::table('hospitals', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+            $table->dropColumn('image');
         });
     }
 };

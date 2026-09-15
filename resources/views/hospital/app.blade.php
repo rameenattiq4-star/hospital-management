@@ -545,6 +545,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Image</th>
                         <th>Name ↕</th>
                         <th>Email ↕</th>
                         <th>Age ↕</th>
@@ -562,6 +563,18 @@
                     <tr>
 
                         <td>#{{ $hospital->id }}</td>
+
+                        <!-- ✅ Image Column -->
+                        <td>
+                            @if($hospital->image)
+                                <img src="{{ asset('storage/' . $hospital->image) }}"
+                                     alt="Hospital"
+                                     style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
+                            @else
+                                <span style="color: #94a3b8; font-size: 11px;">No Image</span>
+                            @endif
+                        </td>
+
                         <td><strong>{{ $hospital->name }}</strong></td>
                         <td>{{ $hospital->email }}</td>
                         <td>{{ $hospital->age }}</td>
@@ -582,22 +595,15 @@
                             <span class="badge badge-active">Active</span>
                         </td>
 
+                        <!-- ✅ ACTIONS COLUMN -->
                         <td>
                             <div class="actions">
-
                                 <a href="#" class="view" title="View">👁</a>
-
-                                <!-- ✅ EDIT BUTTON -->
                                 <a href="{{ url('hospital/edit/' . $hospital->id) }}" class="edit" title="Edit">✏</a>
-
-                                <!-- ✅ DELETE BUTTON (CONFIRM BOX KE SAATH) -->
-                                <a href="{{ url('hospital/delete/' . $hospital->id) }}" 
-                                   class="delete" 
+                                <a href="{{ url('hospital/delete/' . $hospital->id) }}"
+                                   class="delete"
                                    title="Delete"
-                                   onclick="return confirm('Kya aap waqai is hospital ko delete karna chahti hain?')">
-                                    🗑
-                                </a>
-
+                                   onclick="return confirm('Kya aap waqai is hospital ko delete karna chahti hain?')">🗑</a>
                             </div>
                         </td>
 
@@ -606,7 +612,7 @@
                     @empty
 
                     <tr>
-                        <td colspan="8" style="text-align:center; padding:30px;">
+                        <td colspan="9" style="text-align:center; padding:30px;">
                             No hospitals found!
                         </td>
                     </tr>

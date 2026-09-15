@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Hospital;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;   // ✅ Import add kiya
 
 class HospitalController extends Controller
 {
@@ -98,17 +99,24 @@ class HospitalController extends Controller
     }
 
 
-    // CRUD Create — Form Submit Hone Par Data Save Karo
+    // ✅ CRUD Create — Form Submit Hone Par Data Save Karo
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:hospitals,email',
-            'age' => 'required|integer',
+            'age' => 'required|integer|min:1|max:100',
             'date_of_birth' => 'required|date',
-            'gender' => 'required',
-            'score' => 'required|integer',
+            'gender' => 'required|in:m,f',
+            'score' => 'required|integer|min:0|max:100',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        // ✅ Image Upload
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('hospitals', 'public');
+        }
 
         Hospital::create([
             'name' => $request->name,
@@ -117,6 +125,7 @@ class HospitalController extends Controller
             'date_of_birth' => $request->date_of_birth,
             'gender' => $request->gender,
             'score' => $request->score,
+            'image' => $imagePath,
         ]);
 
         return redirect('hospital')->with('success', 'Hospital added successfully!');
@@ -135,32 +144,56 @@ class HospitalController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:hospitals,email,' . $id,
-            'age' => 'required|integer',
+            'age' => 'required|integer|min:1|max:100',
             'date_of_birth' => 'required|date',
-            'gender' => 'required',
-            'score' => 'required|integer',
+            'gender' => 'required|in:m,f',
+            'score' => 'required|integer|min:0|max:100',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $hospital = Hospital::findOrFail($id);
 
-        $hospital->update([
+        $data = [
             'name' => $request->name,
             'email' => $request->email,
             'age' => $request->age,
             'date_of_birth' => $request->date_of_birth,
             'gender' => $request->gender,
-        ]);
+            'score' => $request->score,
+        ];
+
+        // ✅ Image Upload (agar nayi image aayi ho)
+        if ($request->hasFile('image')) {
+
+            // ✅ Pehle purani image delete karo
+            if ($hospital->image) {
+                Storage::disk('public')->delete($hospital->image);
+            }
+
+            $data['image'] = $request->file('image')->store('hospitals', 'public');
+        }
+
+        $hospital->update($data);
 
         return redirect('hospital')->with('success', 'Hospital updated successfully!');
     }
-  
-public function delete($id)
-{
-    $hospital = Hospital::findOrFail($id);
-    $hospital->delete();
 
-    return redirect('hospital')->with('success', 'Hospital deleted successfully!');
-}
+
+    // ✅ CRUD Delete — Record + Image Delete Karo
+    public function delete($id)
+    {
+        $hospital = Hospital::findOrFail($id);
+
+        // ✅ Image delete karo storage se
+        if ($hospital->image) {
+            Storage::disk('public')->delete($hospital->image);
+        }
+
+        // ✅ Database se record delete karo
+        $hospital->delete();
+
+        return redirect('hospital')->with('success', 'Hospital deleted successfully!');
+    }
 }

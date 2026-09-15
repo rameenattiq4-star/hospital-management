@@ -11,11 +11,12 @@ class Hospital extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name',
-        'email',
-        'age',
-        'date_of_birth',
-        'gender',
-        'score',
-    ];
+    'name',
+    'email',
+    'age',
+    'date_of_birth',
+    'gender',
+    'score',
+    'image',   
+];
 }
