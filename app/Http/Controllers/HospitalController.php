@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Hospital;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class HospitalController extends Controller
 {
-    // Soft delete wale record ko restore karo
+    // ================= SOFT DELETE RESTORE =================
     public function restoreData()
     {
         $item = Hospital::withTrashed()->find(1);
@@ -23,7 +22,7 @@ class HospitalController extends Controller
     }
 
 
-    // Record ko permanently delete karo
+    // ================= FORCE DELETE =================
     public function forceDelete()
     {
         $item = Hospital::withTrashed()->find(1);
@@ -37,18 +36,51 @@ class HospitalController extends Controller
     }
 
 
-    // ✅ Hospital Dashboard — EAGER LOADING KE SAATH
-    public function app()
-    {
-        // ✅ Ek saath saare relationships load karo (Eager Loading)
-        $hospitals = Hospital::with(['address', 'doctors', 'departments'])
-                             ->paginate(10);
+    // ================= ✅ DASHBOARD (SIRF EK app() METHOD) =================
+  public function app()
+{
+    // ✅ FULL AGGREGATES — withCount, withSum, withAvg, withMax, withMin
+    $hospitals = Hospital::with('doctors')
+                         ->withCount('doctors')
+                         ->withSum('doctors', 'score')
+                         ->withAvg('doctors', 'score')
+                         ->withMax('doctors', 'score')
+                         ->withMin('doctors', 'score')
+                         ->paginate(10);
 
-        return view('hospital.app', compact('hospitals'));
-    }
+    // ✅ Overall Stats
+    $totalHospitals = Hospital::count();
+    $totalDoctors   = \App\Models\Doctor::count();
 
+    // ✅ Hospital ke score aggregates
+    $totalScore = Hospital::sum('score');
+    $avgScore   = round(Hospital::avg('score'), 1);
+    $maxScore   = Hospital::max('score');
+    $minScore   = Hospital::min('score');
 
-    // Data Add Karo (4 records)
+    // ✅ Doctor score aggregates (poori table ka)
+    $totalDoctorScore = \App\Models\Doctor::sum('score');
+    $avgDoctorScore   = round(\App\Models\Doctor::avg('score'), 1);
+    $maxDoctorScore   = \App\Models\Doctor::max('score');
+    $minDoctorScore   = \App\Models\Doctor::min('score');
+
+    return view('hospital.app', compact(
+        'hospitals',
+        'totalHospitals',
+        'totalDoctors',
+        'totalScore',
+        'avgScore',
+        'maxScore',
+        'minScore',
+        'totalDoctorScore',
+        'avgDoctorScore',
+        'maxDoctorScore',
+        'minDoctorScore'
+    ));
+    
+}
+
+    // ================= ADD DATA (4 RECORDS) =================
     public function addData()
     {
         $data = [
@@ -94,14 +126,14 @@ class HospitalController extends Controller
     }
 
 
-    // Add Form Dikhane Ke Liye
+    // ================= ADD FORM =================
     public function add()
     {
         return view('hospital.add');
     }
 
 
-    // ✅ CRUD Create — Form Submit Hone Par Data Save Karo
+    // ================= STORE (CREATE) =================
     public function store(Request $request)
     {
         $request->validate([
@@ -114,7 +146,6 @@ class HospitalController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // ✅ Image Upload
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('hospitals', 'public');
@@ -134,10 +165,9 @@ class HospitalController extends Controller
     }
 
 
-    // ✅ CRUD Update — Edit Form Dikhane Ke Liye
+    // ================= EDIT FORM =================
     public function edit($id)
     {
-        // ✅ Eager Loading — relationships bhi load karo
         $hospital = Hospital::with(['address', 'doctors', 'departments'])
                             ->findOrFail($id);
 
@@ -145,7 +175,7 @@ class HospitalController extends Controller
     }
 
 
-    // ✅ CRUD Update — Data Save Karne Ke Liye
+    // ================= UPDATE =================
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -169,14 +199,10 @@ class HospitalController extends Controller
             'score' => $request->score,
         ];
 
-        // ✅ Image Upload (agar nayi image aayi ho)
         if ($request->hasFile('image')) {
-
-            // ✅ Pehle purani image delete karo
             if ($hospital->image) {
                 Storage::disk('public')->delete($hospital->image);
             }
-
             $data['image'] = $request->file('image')->store('hospitals', 'public');
         }
 
@@ -186,37 +212,37 @@ class HospitalController extends Controller
     }
 
 
-    // ✅ CRUD Delete — Record + Image Delete Karo
+    // ================= DELETE =================
     public function delete($id)
     {
         $hospital = Hospital::findOrFail($id);
 
-        // ✅ Image delete karo storage se
         if ($hospital->image) {
             Storage::disk('public')->delete($hospital->image);
         }
 
-        // ✅ Database se record delete karo
         $hospital->delete();
 
         return redirect('hospital')->with('success', 'Hospital deleted successfully!');
     }
 
+
+    // ================= HAS ONE THROUGH =================
     public function hasOneThrough()
-{
-    // ✅ Eager Loading — sab relationships load karo
-    $hospitals = Hospital::with(['address', 'doctors', 'departments', 'firstDoctor'])
-                         ->paginate(10);
+    {
+        $hospitals = Hospital::with(['address', 'departments', 'firstDoctor'])
+                             ->paginate(10);
 
-    return view('hospital.has-one-through', compact('hospitals'));
-}
+        return view('hospital.has-one-through', compact('hospitals'));
+    }
 
-public function hasManyThrough()
-{
-    // ✅ Eager Loading — saare doctors bhi load karo
-    $hospitals = Hospital::with(['address', 'departments', 'allDoctors'])
-                         ->paginate(10);
 
-    return view('hospital.has-many-through', compact('hospitals'));
-}
+    // ================= HAS MANY THROUGH =================
+    public function hasManyThrough()
+    {
+        $hospitals = Hospital::with(['address', 'departments', 'allDoctors'])
+                             ->paginate(10);
+
+        return view('hospital.has-many-through', compact('hospitals'));
+    }
 }

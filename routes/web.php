@@ -29,3 +29,10 @@ Route::delete('hospital/delete/{id}', [HospitalController::class, 'delete']);
 
 Route::get('has-one-through', [HospitalController::class, 'hasOneThrough']);
 Route::get('has-many-through', [HospitalController::class, 'hasManyThrough']);
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -27,10 +27,10 @@ class Hospital extends Model
     }
 
     // ✅ One to Many — 1 hospital ke bohat se doctors
-    public function doctors()
-    {
-        return $this->hasMany(Doctor::class);
-    }
+   public function doctors()
+{
+    return $this->hasMany(\App\Models\Doctor::class);
+}
 
     // ✅ Many to Many — 1 hospital ke bohat se departments
     public function departments()

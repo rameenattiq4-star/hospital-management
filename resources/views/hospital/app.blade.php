@@ -3,687 +3,504 @@
 @section('content')
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
         margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: 'Segoe UI', Arial, sans-serif;
         background: #f1f5f9;
         color: #1e293b;
     }
 
     /* ================= HEADER ================= */
-
     .top-header {
-        background: #17203d;
-        color: white;
-        height: 68px;
-        padding: 0 40px;
+        background: linear-gradient(135deg, #ffffff, #f8fafc);
+        color: #1e293b;
+        padding: 22px 40px;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        border-bottom: 3px solid #0284c7;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
 
     .header-title h1 {
         margin: 0;
-        font-size: 21px;
-        font-weight: 700;
+        font-size: 24px;
+        font-weight: 800;
+        background: linear-gradient(90deg, #0284c7, #059669);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
     .header-title p {
-        margin: 3px 0 0;
-        font-size: 10px;
-        color: #cbd5e1;
+        margin: 5px 0 0;
+        font-size: 12px;
+        color: #64748b;
+        font-weight: 500;
     }
 
     .header-icon {
         font-size: 32px;
-        opacity: 0.35;
+        background: linear-gradient(135deg, #0284c7, #059669);
+        padding: 12px 18px;
+        border-radius: 14px;
+        color: white;
+        box-shadow: 0 8px 20px rgba(2, 132, 199, 0.25);
     }
 
-
     /* ================= NAVBAR ================= */
-
     .navbar {
-        height: 42px;
-        background: #17203d;
-        padding-left: 40px;
+        background: #ffffff;
+        padding: 0 40px;
         display: flex;
-        align-items: center;
-        gap: 8px;
-        border-bottom: 2px solid #facc15;
+        gap: 5px;
+        border-bottom: 1px solid #e2e8f0;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.03);
     }
 
     .navbar a {
-        color: white;
+        color: #64748b;
         text-decoration: none;
-        font-size: 10px;
+        font-size: 13px;
         font-weight: 600;
-        padding: 8px 12px;
+        padding: 16px 22px;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+    }
+
+    .navbar a:hover { color: #0284c7; background: #f0f9ff; }
+    .navbar a.active {
+        color: #0284c7;
+        border-bottom-color: #0284c7;
+        background: #f0f9ff;
+    }
+
+    /* ================= MAIN ================= */
+    .main-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 30px 25px;
+    }
+
+    .section-title {
+        font-size: 13px;
+        font-weight: 800;
+        color: #0284c7;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin: 25px 0 15px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .section-title::before {
+        content: '';
+        width: 4px;
+        height: 18px;
+        background: linear-gradient(180deg, #0284c7, #059669);
         border-radius: 3px;
     }
 
-    .navbar a:hover {
-        background: #293555;
+    /* ================= STATS CARDS ================= */
+    .stats-grid-5 {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
     }
 
-    .navbar a.active {
-        background: #facc15;
-        color: #17203d;
-    }
-
-
-    /* ================= MAIN ================= */
-
-    .main-container {
-        max-width: 1250px;
-        margin: 0 auto;
-        padding: 15px 25px 40px;
-    }
-
-
-    /* ================= STATS ================= */
-
-    .stats-container {
+    .stats-grid-4 {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 14px;
-        margin-bottom: 24px;
+        gap: 16px;
     }
 
     .stat-card {
-        height: 76px;
-        background: white;
-        border-radius: 9px;
-        padding: 14px;
+        border-radius: 16px;
+        padding: 22px;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+        min-height: 120px;
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-        border-left: 3px solid #667eea;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-left: 5px solid #0284c7;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
-    .stat-card.active {
-        border-left-color: #10b981;
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(2, 132, 199, 0.15);
     }
 
-    .stat-card.pending {
-        border-left-color: #fbbf24;
-    }
-
-    .stat-card.inactive {
-        border-left-color: #ef4444;
-    }
+    .card-blue   { border-left-color: #0284c7; }
+    .card-green  { border-left-color: #059669; }
+    .card-pink   { border-left-color: #db2777; }
+    .card-orange { border-left-color: #ea580c; }
+    .card-purple { border-left-color: #7c3aed; }
+    .card-teal   { border-left-color: #0d9488; }
+    .card-red    { border-left-color: #dc2626; }
+    .card-indigo { border-left-color: #4f46e5; }
 
     .stat-card h2 {
-        margin: 0 0 4px;
-        font-size: 18px;
-        color: #111827;
+        margin: 0;
+        font-size: 34px;
+        font-weight: 800;
+        color: #0f172a;
+        position: relative;
+        z-index: 2;
     }
 
     .stat-card p {
-        margin: 0;
-        font-size: 9px;
+        margin: 6px 0 0;
+        font-size: 11px;
         color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 700;
+        position: relative;
+        z-index: 2;
     }
 
     .stat-icon {
-        font-size: 25px;
-        color: #cbd5e1;
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 56px;
+        opacity: 0.08;
+        z-index: 1;
     }
 
+    .card-blue   h2 { color: #0284c7; }
+    .card-green  h2 { color: #059669; }
+    .card-pink   h2 { color: #db2777; }
+    .card-orange h2 { color: #ea580c; }
+    .card-purple h2 { color: #7c3aed; }
+    .card-teal   h2 { color: #0d9488; }
+    .card-red    h2 { color: #dc2626; }
+    .card-indigo h2 { color: #4f46e5; }
 
-    /* ================= RECORDS ================= */
-
+    /* ================= TABLE CARD ================= */
     .records-card {
-        background: white;
-        border-radius: 9px;
-        padding: 14px;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        margin-bottom: 25px;
+        border: 1px solid #e2e8f0;
     }
 
     .records-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 2px 0 12px;
-        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 18px;
+        border-bottom: 2px solid #f1f5f9;
+        margin-bottom: 20px;
     }
 
     .records-header h2 {
         margin: 0;
-        font-size: 14px;
-        color: #17203d;
-    }
-
-    .records-count {
-        background: #17203d;
-        color: white;
-        padding: 5px 11px;
-        border-radius: 15px;
-        font-size: 9px;
-    }
-
-
-    /* ================= FILTERS ================= */
-
-    .filter-box {
-        background: #f8fafc;
-        border: 1px solid #e5e7eb;
-        border-radius: 6px;
-        margin-top: 10px;
-        padding: 10px;
-    }
-
-    .filter-row {
-        display: grid;
-        grid-template-columns: 1.2fr 1.2fr 1fr 1fr;
+        font-size: 17px;
+        color: #0f172a;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
         gap: 8px;
     }
 
-    .filter-row input,
-    .filter-row select {
-        width: 100%;
-        height: 30px;
-        padding: 5px 8px;
-        border: 1px solid #dbe2ea;
-        border-radius: 4px;
-        background: white;
-        font-size: 9px;
-        color: #334155;
-        outline: none;
-    }
-
-    .filter-row input:focus,
-    .filter-row select:focus {
-        border-color: #667eea;
-    }
-
-    .filter-row input::placeholder {
-        color: #64748b;
-    }
-
-    .filter-buttons {
-        display: flex;
-        justify-content: flex-end;
-        gap: 6px;
-        margin-top: 8px;
-    }
-
-    .filter-btn {
-        background: #17203d;
+    .add-btn {
+        background: linear-gradient(135deg, #0284c7, #0369a1);
         color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 8px 16px;
-        font-size: 9px;
-        font-weight: 600;
-        cursor: pointer;
+        padding: 11px 24px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
+        transition: all 0.3s;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
     }
 
-    .reset-btn {
-        background: #ef4444;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 8px 16px;
-        font-size: 9px;
-        font-weight: 600;
-        cursor: pointer;
+    .add-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(2, 132, 199, 0.4);
     }
-
-    .filter-btn:hover {
-        background: #293555;
-    }
-
-    .reset-btn:hover {
-        background: #dc2626;
-    }
-
 
     /* ================= TABLE ================= */
-
-    .table-wrapper {
-        overflow-x: auto;
-        margin-top: 10px;
-    }
-
     .data-table {
         width: 100%;
         border-collapse: collapse;
-        min-width: 950px;
     }
 
     .data-table th {
         background: #f8fafc;
         color: #475569;
-        font-size: 9px;
-        font-weight: 700;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
         text-align: left;
-        padding: 10px 8px;
-        border-bottom: 1px solid #e2e8f0;
+        padding: 14px 12px;
+        border-bottom: 2px solid #e2e8f0;
     }
 
     .data-table td {
-        padding: 9px 8px;
-        font-size: 9px;
+        padding: 14px 12px;
+        font-size: 13px;
         color: #334155;
-        border-bottom: 1px solid #e5e7eb;
+        border-bottom: 1px solid #f1f5f9;
+        font-weight: 500;
+    }
+
+    .data-table tbody tr {
+        transition: background 0.2s;
     }
 
     .data-table tbody tr:hover {
-        background: #f8fafc;
+        background: #f0f9ff;
     }
 
+    /* ✅ Dark Circular Badge */
+    .circle-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        height: 32px;
+        padding: 0 10px;
+        background: #1e293b;
+        color: white;
+        border-radius: 50%;
+        font-size: 12px;
+        font-weight: 800;
+        box-shadow: 0 4px 12px rgba(30, 41, 59, 0.25);
+    }
 
-    /* ================= BADGES ================= */
-
+    /* ✅ Score Badges */
     .badge {
         display: inline-block;
-        padding: 4px 9px;
-        border-radius: 12px;
-        font-size: 8px;
-        font-weight: 600;
-        margin: 2px 2px 2px 0;
-    }
-
-    .badge-female {
-        background: #fce7f3;
-        color: #db2777;
-    }
-
-    .badge-male {
-        background: #dbeafe;
-        color: #2563eb;
-    }
-
-    .badge-active {
-        background: #dcfce7;
-        color: #16a34a;
-    }
-
-    /* ✅ Naye Badges — Relationships Ke Liye */
-    .badge-doctor {
-        background: #e0e7ff;
-        color: #4338ca;
-    }
-
-    .badge-department {
-        background: #fef3c7;
-        color: #b45309;
-    }
-
-    .badge-address {
-        background: #d1fae5;
-        color: #047857;
-    }
-
-
-    /* ================= SCORE ================= */
-
-    .score {
-        color: #10b981;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 10px;
         font-weight: 700;
     }
 
+    .badge-blue   { background: #dbeafe; color: #1e40af; }
+    .badge-green  { background: #d1fae5; color: #065f46; }
+    .badge-yellow { background: #fef3c7; color: #92400e; }
+    .badge-red    { background: #fee2e2; color: #991b1b; }
 
-    /* ================= ACTIONS ================= */
+    .text-center { text-align: center; }
+    .text-right  { text-align: right; }
 
-    .actions {
-        display: flex;
-        gap: 8px;
-        align-items: center;
+    .student-name {
+        font-weight: 700;
+        color: #0284c7;
     }
 
-    .actions a {
-        text-decoration: none;
-        font-size: 16px;
-        padding: 4px 6px;
+    @media (max-width: 1100px) {
+        .stats-grid-5 { grid-template-columns: repeat(3, 1fr); }
+        .stats-grid-4 { grid-template-columns: repeat(2, 1fr); }
+        .data-table { font-size: 11px; }
+        .data-table th, .data-table td { padding: 10px 6px; }
     }
 
-    .view {
-        color: #6366f1;
-    }
-
-    .edit {
-        color: #f59e0b;
-    }
-
-    .delete {
-        color: #ef4444;
-    }
-
-    .actions a:hover {
-        opacity: 0.7;
-    }
-
-
-    /* ================= PAGINATION ================= */
-
-    .paginationDiv {
-        margin-top: 20px;
-        text-align: center;
-    }
-
-
-    /* ================= RESPONSIVE ================= */
-
-    @media (max-width: 800px) {
-
-        .stats-container {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .filter-row {
-            grid-template-columns: 1fr 1fr;
-        }
-
-        .top-header {
-            padding: 0 20px;
-        }
-
-        .navbar {
-            padding-left: 20px;
-        }
-
-        .main-container {
-            padding: 15px;
-        }
-    }
-
-    @media (max-width: 500px) {
-
-        .stats-container {
-            grid-template-columns: 1fr;
-        }
-
-        .filter-row {
-            grid-template-columns: 1fr;
-        }
-
-        .navbar {
-            padding-left: 10px;
-            gap: 2px;
-        }
-
-        .navbar a {
-            padding: 7px;
-            font-size: 8px;
-        }
+    @media (max-width: 700px) {
+        .stats-grid-5 { grid-template-columns: repeat(2, 1fr); }
+        .stats-grid-4 { grid-template-columns: 1fr; }
+        .main-container { padding: 15px; }
     }
 </style>
 
 
 <!-- ================= HEADER ================= -->
-
 <div class="top-header">
-
     <div class="header-title">
-        <h1>Hospital Management System</h1>
-        <p>Manage your hospitals efficiently with ease</p>
+        <h1>🏥 Hospital Management System</h1>
+        <p>Dashboard — All Hospitals Records With Doctor Aggregates</p>
     </div>
-
-    <div class="header-icon">
-        🏥
-    </div>
-
+    <div class="header-icon">📊</div>
 </div>
 
 
-<!-- ================= NAVIGATION ================= -->
-
+<!-- ================= NAVBAR ================= -->
 <div class="navbar">
-
-    <a href="{{ url('hospital') }}" class="active">
-        🏠 Dashboard
-    </a>
-
-    <a href="#">
-        👨‍⚕️ Doctors
-    </a>
-
-    <a href="#">
-        🏥 Hospitals
-    </a>
-
-    <a href="#">
-        ⚙ Settings
-    </a>
-
+    <a href="{{ url('hospital') }}" class="active">🏠 Dashboard</a>
+    <a href="{{ url('hospital/add') }}">➕ Add Hospital</a>
+    <a href="{{ url('has-one-through') }}">📍 Has One Through</a>
+    <a href="{{ url('has-many-through') }}">👨‍⚕️ Has Many Through</a>
 </div>
 
 
 <!-- ================= MAIN CONTENT ================= -->
-
 <div class="main-container">
 
+    <!-- =====================================================
+         TOP STATS CARDS (Overview)
+    ====================================================== -->
+    <h3 class="section-title">📊 Hospital Overview</h3>
 
-    <!-- ================= STAT CARDS ================= -->
-
-    <div class="stats-container">
-
-        <div class="stat-card">
-            <div>
-                <h2>{{ $hospitals->total() }}</h2>
-                <p>Total Hospitals</p>
-            </div>
+    <div class="stats-grid-5">
+        <div class="stat-card card-blue">
+            <h2>{{ $hospitals->total() ?? 0 }}</h2>
+            <p>Total Hospitals</p>
             <div class="stat-icon">🏥</div>
         </div>
 
-        <div class="stat-card active">
-            <div>
-                <h2>{{ $hospitals->count() }}</h2>
-                <p>Active Hospitals</p>
-            </div>
-            <div class="stat-icon">👤✓</div>
+        <div class="stat-card card-green">
+            <h2>{{ $hospitals->sum('doctors_count') ?? 0 }}</h2>
+            <p>Total Doctors</p>
+            <div class="stat-icon">👨‍⚕️</div>
         </div>
 
-        <div class="stat-card pending">
-            <div>
-                <h2>0</h2>
-                <p>Pending Hospitals</p>
-            </div>
-            <div class="stat-icon">👤◷</div>
+        <div class="stat-card card-pink">
+            <h2>{{ $hospitals->sum('doctors_sum_score') ?? 0 }}</h2>
+            <p>Doctor Score Sum</p>
+            <div class="stat-icon">📈</div>
         </div>
 
-        <div class="stat-card inactive">
-            <div>
-                <h2>0</h2>
-                <p>Inactive Hospitals</p>
-            </div>
-            <div class="stat-icon">👤×</div>
+        <div class="stat-card card-orange">
+            <h2>{{ round($hospitals->avg('doctors_avg_score') ?? 0, 1) }}</h2>
+            <p>Avg Doctor Score</p>
+            <div class="stat-icon">📊</div>
         </div>
 
+        <div class="stat-card card-purple">
+            <h2>{{ $hospitals->max('doctors_max_score') ?? 0 }}</h2>
+            <p>Max Doctor Score</p>
+            <div class="stat-icon">⬆️</div>
+        </div>
     </div>
 
 
-    <!-- ================= RECORDS ================= -->
+    <!-- =====================================================
+         TABLE 1: Hospitals with Doctors Count
+    ====================================================== -->
+    <h3 class="section-title">🏥 Hospitals with Doctors Count</h3>
 
     <div class="records-card">
-
-        <!-- Header -->
-        <div class="records-header">
-            <h2>☷ Hospital Records</h2>
-            <span class="records-count">
-                {{ $hospitals->total() }} Hospitals
-            </span>
-        </div>
-
-
-        <!-- ✅ ADD HOSPITAL BUTTON -->
-        <div style="margin-top: 12px; text-align: right;">
-            <a class="addHospitalButton"
-               href="{{ URL('hospital/add') }}"
-               style="background: #2563eb; color: white; padding: 8px 18px; border-radius: 5px; text-decoration: none; font-size: 11px; font-weight: 600;">
-                ➕ Add Hospital
-            </a>
-        </div>
-
-
-        <!-- ================= FILTERS ================= -->
-
-        <div class="filter-box">
-
-            <div class="filter-row">
-
-                <input type="text" id="search" name="search" placeholder="Name">
-                <input type="text" name="email" placeholder="Email">
-
-                <select name="gender">
-                    <option value="">All Genders</option>
-                    <option value="m">Male</option>
-                    <option value="f">Female</option>
-                </select>
-
-                <select name="status">
-                    <option value="">All Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-
-            </div>
-
-            <div class="filter-buttons">
-                <button type="button" class="filter-btn">🔍 Filter</button>
-                <button type="button" class="reset-btn">↻ Reset</button>
-            </div>
-
-        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Hospital Name</th>
+                    <th class="text-right">Total Doctors</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($hospitals as $hospital)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td class="student-name">{{ $hospital->name }}</td>
+                    <td class="text-right">
+                        <span class="circle-badge">{{ $hospital->doctors_count ?? 0 }}</span>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="3" class="text-center" style="padding:30px; color:#94a3b8;">
+                        No hospitals found!
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 
 
-        <!-- ================= TABLE ================= -->
+    <!-- =====================================================
+         TABLE 2: Hospitals with Departments Count
+    ====================================================== -->
+    <h3 class="section-title">🏢 Hospitals with Departments Count</h3>
 
-        <div class="table-wrapper">
-
-            <table class="data-table">
-
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Image</th>
-                        <th>Name ↕</th>
-                        <th>Email ↕</th>
-                        <th>Age ↕</th>
-                        <th>Gender</th>
-                        <th>Score ↕</th>
-                        <th>📍 Address</th>
-                        <th>👨‍⚕️ Doctors</th>
-                        <th>🏥 Departments</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    @forelse($hospitals as $hospital)
-
-                    <tr>
-
-                        <td>#{{ $hospital->id }}</td>
-
-                        <!-- ✅ Image Column -->
-                        <td>
-                            @if($hospital->image)
-                                <img src="{{ asset('storage/' . $hospital->image) }}"
-                                     alt="Hospital"
-                                     style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
-                            @else
-                                <span style="color: #94a3b8; font-size: 11px;">No Image</span>
-                            @endif
-                        </td>
-
-                        <td><strong>{{ $hospital->name }}</strong></td>
-                        <td>{{ $hospital->email }}</td>
-                        <td>{{ $hospital->age }}</td>
-
-                        <td>
-                            @if($hospital->gender == 'f')
-                                <span class="badge badge-female">♀ Female</span>
-                            @else
-                                <span class="badge badge-male">♂ Male</span>
-                            @endif
-                        </td>
-
-                        <td>
-                            <span class="score">{{ $hospital->score }}%</span>
-                        </td>
-
-                        <!-- ✅ One to One — Address -->
-                        <td>
-                            @if($hospital->address)
-                                <span class="badge badge-address">
-                                    📍 {{ $hospital->address->city }}
-                                </span>
-                            @else
-                                <span style="color: #94a3b8; font-size: 11px;">No Address</span>
-                            @endif
-                        </td>
-
-                        <!-- ✅ One to Many — Doctors -->
-                        <td>
-                            @forelse($hospital->doctors as $doctor)
-                                <span class="badge badge-doctor">
-                                    👨‍⚕️ {{ $doctor->name }}
-                                </span>
-                            @empty
-                                <span style="color: #94a3b8; font-size: 11px;">No Doctors</span>
-                            @endforelse
-                        </td>
-
-                        <!-- ✅ Many to Many — Departments -->
-                        <td>
-                            @forelse($hospital->departments as $department)
-                                <span class="badge badge-department">
-                                    🏥 {{ $department->name }}
-                                </span>
-                            @empty
-                                <span style="color: #94a3b8; font-size: 11px;">No Departments</span>
-                            @endforelse
-                        </td>
-
-                        <td>
-                            <span class="badge badge-active">Active</span>
-                        </td>
-
-                        <!-- ✅ ACTIONS COLUMN -->
-                        <td>
-                            <div class="actions">
-                                <a href="#" class="view" title="View">👁</a>
-                                <a href="{{ url('hospital/edit/' . $hospital->id) }}" class="edit" title="Edit">✏</a>
-                                <a href="{{ url('hospital/delete/' . $hospital->id) }}"
-                                   class="delete"
-                                   title="Delete"
-                                   onclick="return confirm('Kya aap waqai is hospital ko delete karna chahti hain?')">🗑</a>
-                            </div>
-                        </td>
-
-                    </tr>
-
-                    @empty
-
-                    <tr>
-                        <td colspan="12" style="text-align:center; padding:30px;">
-                            No hospitals found!
-                        </td>
-                    </tr>
-
-                    @endforelse
-
-                </tbody>
-
-            </table>
-
-        </div>
+    <div class="records-card">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Hospital Name</th>
+                    <th class="text-right">Total Departments</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($hospitals as $hospital)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td class="student-name">{{ $hospital->name }}</td>
+                    <td class="text-right">
+                        <span class="circle-badge">{{ $hospital->departments_count ?? 0 }}</span>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="3" class="text-center" style="padding:30px; color:#94a3b8;">
+                        No data found!
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 
 
-        <!-- ✅ PAGINATION -->
-        <div class="paginationDiv">
+    <!-- =====================================================
+         TABLE 3: Hospitals with Doctor Score Statistics
+    ====================================================== -->
+    <h3 class="section-title">📊 Hospitals with Doctor Score Statistics</h3>
+
+    <div class="records-card">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Hospital Name</th>
+                    <th class="text-center">Count</th>
+                    <th class="text-center">Sum</th>
+                    <th class="text-center">Avg</th>
+                    <th class="text-center">Max</th>
+                    <th class="text-center">Min</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($hospitals as $hospital)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td class="student-name">{{ $hospital->name }}</td>
+                    <td class="text-center">
+                        <span class="circle-badge">{{ $hospital->doctors_count ?? 0 }}</span>
+                    </td>
+                    <td class="text-center">
+                        <strong>{{ $hospital->doctors_sum_score ?? 0 }}</strong>
+                    </td>
+                    <td class="text-center">
+                        <span class="badge badge-blue">{{ round($hospital->doctors_avg_score ?? 0, 1) }}</span>
+                    </td>
+                    <td class="text-center">
+                        <span class="badge badge-green">{{ $hospital->doctors_max_score ?? 0 }}</span>
+                    </td>
+                    <td class="text-center">
+                        <span class="badge badge-yellow">{{ $hospital->doctors_min_score ?? 0 }}</span>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="7" class="text-center" style="padding:30px; color:#94a3b8;">
+                        No data found!
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+
+        <div style="margin-top:20px; text-align:center;">
             {{ $hospitals->links() }}
         </div>
-
     </div>
 
 </div>
