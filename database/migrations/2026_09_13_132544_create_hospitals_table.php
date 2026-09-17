@@ -8,17 +8,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('hospitals', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->integer('age')->nullable();
-            $table->date('date_of_birth')->nullable();
-            $table->enum('gender', ['m', 'f'])->nullable();
-            $table->integer('score')->nullable();
-            $table->softDeletes();
-            $table->timestamps();
-        });
+       Schema::create('hospitals', function (Blueprint $table) {
+    $table->id();
+    $table->string('name');
+    $table->string('email')->unique();
+    $table->integer('age')->nullable();
+    $table->date('date_of_birth')->nullable();
+    $table->enum('gender', ['m', 'f'])->nullable();
+    $table->integer('score')->nullable();
+    $table->string('image')->nullable();
+    $table->softDeletes();
+    $table->timestamps();
+});
     }
 
     public function down(): void

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Hospital;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;   // ✅ Import add kiya
+use Illuminate\Support\Facades\Storage;
 
 class HospitalController extends Controller
 {
@@ -37,10 +37,12 @@ class HospitalController extends Controller
     }
 
 
-    // Hospital Dashboard
+    // ✅ Hospital Dashboard — EAGER LOADING KE SAATH
     public function app()
     {
-        $hospitals = Hospital::paginate(10);
+        // ✅ Ek saath saare relationships load karo (Eager Loading)
+        $hospitals = Hospital::with(['address', 'doctors', 'departments'])
+                             ->paginate(10);
 
         return view('hospital.app', compact('hospitals'));
     }
@@ -135,7 +137,10 @@ class HospitalController extends Controller
     // ✅ CRUD Update — Edit Form Dikhane Ke Liye
     public function edit($id)
     {
-        $hospital = Hospital::findOrFail($id);
+        // ✅ Eager Loading — relationships bhi load karo
+        $hospital = Hospital::with(['address', 'doctors', 'departments'])
+                            ->findOrFail($id);
+
         return view('hospital.edit', compact('hospital'));
     }
 
@@ -196,4 +201,22 @@ class HospitalController extends Controller
 
         return redirect('hospital')->with('success', 'Hospital deleted successfully!');
     }
+
+    public function hasOneThrough()
+{
+    // ✅ Eager Loading — sab relationships load karo
+    $hospitals = Hospital::with(['address', 'doctors', 'departments', 'firstDoctor'])
+                         ->paginate(10);
+
+    return view('hospital.has-one-through', compact('hospitals'));
+}
+
+public function hasManyThrough()
+{
+    // ✅ Eager Loading — saare doctors bhi load karo
+    $hospitals = Hospital::with(['address', 'departments', 'allDoctors'])
+                         ->paginate(10);
+
+    return view('hospital.has-many-through', compact('hospitals'));
+}
 }

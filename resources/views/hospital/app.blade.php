@@ -253,7 +253,7 @@
     .data-table {
         width: 100%;
         border-collapse: collapse;
-        min-width: 750px;
+        min-width: 950px;
     }
 
     .data-table th {
@@ -286,6 +286,7 @@
         border-radius: 12px;
         font-size: 8px;
         font-weight: 600;
+        margin: 2px 2px 2px 0;
     }
 
     .badge-female {
@@ -301,6 +302,22 @@
     .badge-active {
         background: #dcfce7;
         color: #16a34a;
+    }
+
+    /* ✅ Naye Badges — Relationships Ke Liye */
+    .badge-doctor {
+        background: #e0e7ff;
+        color: #4338ca;
+    }
+
+    .badge-department {
+        background: #fef3c7;
+        color: #b45309;
+    }
+
+    .badge-address {
+        background: #d1fae5;
+        color: #047857;
     }
 
 
@@ -551,6 +568,9 @@
                         <th>Age ↕</th>
                         <th>Gender</th>
                         <th>Score ↕</th>
+                        <th>📍 Address</th>
+                        <th>👨‍⚕️ Doctors</th>
+                        <th>🏥 Departments</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -591,6 +611,39 @@
                             <span class="score">{{ $hospital->score }}%</span>
                         </td>
 
+                        <!-- ✅ One to One — Address -->
+                        <td>
+                            @if($hospital->address)
+                                <span class="badge badge-address">
+                                    📍 {{ $hospital->address->city }}
+                                </span>
+                            @else
+                                <span style="color: #94a3b8; font-size: 11px;">No Address</span>
+                            @endif
+                        </td>
+
+                        <!-- ✅ One to Many — Doctors -->
+                        <td>
+                            @forelse($hospital->doctors as $doctor)
+                                <span class="badge badge-doctor">
+                                    👨‍⚕️ {{ $doctor->name }}
+                                </span>
+                            @empty
+                                <span style="color: #94a3b8; font-size: 11px;">No Doctors</span>
+                            @endforelse
+                        </td>
+
+                        <!-- ✅ Many to Many — Departments -->
+                        <td>
+                            @forelse($hospital->departments as $department)
+                                <span class="badge badge-department">
+                                    🏥 {{ $department->name }}
+                                </span>
+                            @empty
+                                <span style="color: #94a3b8; font-size: 11px;">No Departments</span>
+                            @endforelse
+                        </td>
+
                         <td>
                             <span class="badge badge-active">Active</span>
                         </td>
@@ -612,7 +665,7 @@
                     @empty
 
                     <tr>
-                        <td colspan="9" style="text-align:center; padding:30px;">
+                        <td colspan="12" style="text-align:center; padding:30px;">
                             No hospitals found!
                         </td>
                     </tr>

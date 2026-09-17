@@ -25,3 +25,7 @@ Route::post('hospital/store', [HospitalController::class, 'store']);
 Route::get('hospital/edit/{id}', [HospitalController::class, 'edit']);
 Route::post('hospital/update/{id}', [HospitalController::class, 'update']);
 Route::delete('hospital/delete/{id}', [HospitalController::class, 'delete']);
+
+
+Route::get('has-one-through', [HospitalController::class, 'hasOneThrough']);
+Route::get('has-many-through', [HospitalController::class, 'hasManyThrough']);
