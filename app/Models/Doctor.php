@@ -2,21 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Doctor extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'hospital_id',
         'name',
-        'specialization',
+        'email',
         'phone',
+        'hospital_id',
     ];
 
-    // ✅ Reverse — Doctor ka 1 hospital
+    // ✅ Hospital relationship
     public function hospital()
     {
         return $this->belongsTo(Hospital::class);

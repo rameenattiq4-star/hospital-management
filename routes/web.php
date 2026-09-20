@@ -1,38 +1,46 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HospitalController;
+use App\Http\Controllers\DoctorsController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::middleware('auth')->group(function () {
 
-Route::get('hospital', [HospitalController::class, 'app']);
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-Route::get('add-data', [HospitalController::class, 'addData']);
-Route::get('get-data', [HospitalController::class, 'getData']);
-Route::get('update-data', [HospitalController::class, 'updateData']);
-Route::get('delete-data', [HospitalController::class, 'deleteData']);
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-Route::get('restore-data', [HospitalController::class, 'restoreData']);
-Route::get('force-delete', [HospitalController::class, 'forceDelete']);
+    // ✅ Hospital Routes
+    Route::prefix('hospital')->controller(HospitalController::class)->group(function () {
+        Route::get('/', 'app');
+        Route::get('add', 'add');
+        Route::post('create', 'store');
+        Route::get('edit/{id}', 'edit');
+        Route::post('update/{id}', 'update');
+        Route::get('delete/{id}', 'delete');
+    });
 
-Route::get('hospital/add', [HospitalController::class, 'add']);        
-Route::post('hospital/store', [HospitalController::class, 'store']);   
+    // ✅ Doctor Routes — Alias 'doctor' use karein
+    Route::prefix('doctor')->controller(DoctorsController::class)->middleware('doctor')->group(function () {
+        Route::get('/', 'index');
+        Route::view('add', 'doctor.add');
+        Route::post('create', 'store');
+        Route::get('edit/{id}', 'edit');
+        Route::post('update/{id}', 'update');
+        Route::delete('delete/{id}', 'delete');
+    });
 
+    Route::get('has-one-through', [HospitalController::class, 'hasOneThrough']);
+    Route::get('has-many-through', [HospitalController::class, 'hasManyThrough']);
+});
 
-Route::get('hospital/edit/{id}', [HospitalController::class, 'edit']);
-Route::post('hospital/update/{id}', [HospitalController::class, 'update']);
-Route::delete('hospital/delete/{id}', [HospitalController::class, 'delete']);
-
-
-Route::get('has-one-through', [HospitalController::class, 'hasOneThrough']);
-Route::get('has-many-through', [HospitalController::class, 'hasManyThrough']);
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+require __DIR__.'/auth.php';

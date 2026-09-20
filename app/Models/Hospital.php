@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Hospital extends Model
 {
-    use HasFactory, SoftDeletes;
+    use SoftDeletes;
 
     protected $fillable = [
+        'user_id',
         'name',
         'email',
         'age',
@@ -20,46 +20,13 @@ class Hospital extends Model
         'image',
     ];
 
-    // ✅ One to One — 1 hospital ka 1 address
-    public function address()
+    public function user()
     {
-        return $this->hasOne(Address::class);
+        return $this->belongsTo(User::class);
     }
 
-    // ✅ One to Many — 1 hospital ke bohat se doctors
-   public function doctors()
-{
-    return $this->hasMany(\App\Models\Doctor::class);
-}
-
-    // ✅ Many to Many — 1 hospital ke bohat se departments
-    public function departments()
+    public function doctors()
     {
-        return $this->belongsToMany(Department::class);
+        return $this->hasMany(Doctor::class);
     }
-
-    // ✅ Has One Through — Hospital ka first doctor (department ke through)
-public function firstDoctor()
-{
-    return $this->hasOneThrough(
-        Doctor::class,       // Final model
-        Department::class,   // Through model
-        'hospital_id',       // FK on departments table
-        'department_id',     // FK on doctors table
-        'id',                // Local key on hospitals
-        'id'                 // Local key on departments
-    );
-}
-public function allDoctors()
-{
-    return $this->hasManyThrough(
-        Doctor::class,       // Final model
-        Department::class,   // Through model
-        'hospital_id',       // FK on departments table
-        'department_id',     // FK on doctors table
-        'id',                // Local key on hospitals
-        'id'                 // Local key on departments
-    );
-}
-
 }

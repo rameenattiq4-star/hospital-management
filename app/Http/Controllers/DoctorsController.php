@@ -2,47 +2,80 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Doctors;
 use Illuminate\Http\Request;
+use App\Models\Doctor;   // ✅ Doctor model (singular) use karein
+use App\Models\Hospital;
 
 class DoctorsController extends Controller
 {
+    public function index()
+    {
+        // ✅ Saare doctors fetch karein (hospital ke saath)
+        $doctors = Doctor::with('hospital')->paginate(15);
 
-public function index()
-{
-    return Doctors::all();
-}
+        return view('doctor.index', compact('doctors'));
+    }
 
-public function add()
-{
-    $item = new Doctors();
-    $item->name = 'Test Name';
-    $item->save();
+    public function add()
+    {
+        // ✅ Hospitals list for dropdown
+        $hospitals = Hospital::all();
 
-    return 'Added Successfully';
-}
+        return view('doctor.add', compact('hospitals'));
+    }
 
-public function show($id)
-{
-    $item = Doctors::findOrFail($id);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'nullable|string',
+            'hospital_id' => 'required|exists:hospitals,id',
+        ]);
 
-    return $item;
-}
+        Doctor::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'hospital_id' => $request->hospital_id,
+        ]);
 
-public function update($id)
-{
-    $item = Doctors::findOrFail($id);
-    $item->name = 'Updated Teacher';
-    $item->update();
+        return redirect('doctor')->with('success', 'Doctor added successfully!');
+    }
 
-    return 'updated Successfully';
-}
+    public function edit($id)
+    {
+        $doctor = Doctor::findOrFail($id);
+        $hospitals = Hospital::all();
 
-public function delete($id)
-{
-    $item = Doctors::findOrFail($id);
-    $item->delete();
+        return view('doctor.edit', compact('doctor', 'hospitals'));
+    }
 
-    return 'Deleted Successfully';
-}
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'nullable|string',
+            'hospital_id' => 'required|exists:hospitals,id',
+        ]);
+
+        $doctor = Doctor::findOrFail($id);
+        $doctor->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'hospital_id' => $request->hospital_id,
+        ]);
+
+        return redirect('doctor')->with('success', 'Doctor updated successfully!');
+    }
+
+    public function delete($id)
+    {
+        $doctor = Doctor::findOrFail($id);
+        $doctor->delete();
+
+        return redirect('doctor')->with('success', 'Doctor deleted successfully!');
+    }
 }

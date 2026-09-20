@@ -304,6 +304,21 @@
         color: #0284c7;
     }
 
+    /* ✅ Action Buttons */
+    .actions a {
+        text-decoration: none;
+        font-size: 16px;
+        padding: 6px 10px;
+        display: inline-block;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+
+    .actions a:hover {
+        background: #f1f5f9;
+        transform: scale(1.1);
+    }
+
     @media (max-width: 1100px) {
         .stats-grid-5 { grid-template-columns: repeat(3, 1fr); }
         .stats-grid-4 { grid-template-columns: repeat(2, 1fr); }
@@ -451,6 +466,7 @@
 
     <!-- =====================================================
          TABLE 3: Hospitals with Doctor Score Statistics
+         ✅ Yahan Actions Column Add Kiya Hai With @can
     ====================================================== -->
     <h3 class="section-title">📊 Hospitals with Doctor Score Statistics</h3>
 
@@ -465,6 +481,7 @@
                     <th class="text-center">Avg</th>
                     <th class="text-center">Max</th>
                     <th class="text-center">Min</th>
+                    <th class="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -487,10 +504,28 @@
                     <td class="text-center">
                         <span class="badge badge-yellow">{{ $hospital->doctors_min_score ?? 0 }}</span>
                     </td>
+                    <td class="text-center actions">
+                        {{-- ✅ GATE: Sirf owner edit kar sakta hai --}}
+                        @can('edit-hospital', $hospital)
+                            <a href="{{ url('hospital/edit/' . $hospital->id) }}" title="Edit">✏️</a>
+                        @endcan
+
+                        {{-- ✅ GATE: Sirf owner delete kar sakta hai --}}
+                        @can('delete-hospital', $hospital)
+                            <a href="{{ url('hospital/delete/' . $hospital->id) }}"
+                               title="Delete"
+                               onclick="return confirm('Delete this hospital?')">🗑️</a>
+                        @endcan
+
+                        {{-- Agar user owner nahi hai --}}
+                        @cannot('edit-hospital', $hospital)
+                            <span style="color:#cbd5e1; font-size:12px;">🔒</span>
+                        @endcannot
+                    </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center" style="padding:30px; color:#94a3b8;">
+                    <td colspan="8" class="text-center" style="padding:30px; color:#94a3b8;">
                         No data found!
                     </td>
                 </tr>
