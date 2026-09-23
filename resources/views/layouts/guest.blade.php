@@ -1,30 +1,48 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Hospital Management') }}</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <!-- ✅ Vite CSS/JS — YE ZAROORI HAI -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body style="margin:0; font-family: 'Figtree', sans-serif; background: #f3f4f6;">
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
-            </div>
+    <div style="
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    ">
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
-            </div>
+        <!-- Logo -->
+        <div style="margin-bottom: 20px;">
+            <a href="/">
+                <svg viewBox="0 0 316 316" style="width: 80px; height: 80px; fill: #1e293b;">
+                    <path d="M305.8 81.125C305.77 80.995 305.69 80.885 305.65 80.755C305.56 80.525 305.49 80.285 305.38 80.075C305.28 79.865 305.18 79.655 305.05 79.455C304.91 79.235 304.75 79.025 304.58 78.835C304.41 78.635 304.21 78.455 304 78.285C303.79 78.105 303.56 77.935 303.32 77.785C303.08 77.635 302.83 77.505 302.56 77.395C302.3 77.285 302.02 77.195 301.74 77.125L161.74 41.125C161.19 40.985 160.61 40.985 160.06 41.125L20.06 77.125C19.78 77.195 19.5 77.285 19.24 77.395C18.97 77.505 18.72 77.635 18.48 77.785C18.24 77.935 18.01 78.105 17.8 78.285C17.59 78.455 17.39 78.635 17.22 78.835C17.05 79.025 16.89 79.235 16.75 79.455C16.62 79.655 16.52 79.865 16.42 80.075C16.31 80.285 16.24 80.525 16.15 80.755C16.1 80.885 16.03 80.995 16 81.125V234.875C16.03 235.005 16.1 235.115 16.15 235.245C16.24 235.475 16.31 235.715 16.42 235.925C16.52 236.135 16.62 236.345 16.75 236.545C16.89 236.765 17.05 236.975 17.22 237.165C17.39 237.365 17.59 237.545 17.8 237.715C18.01 237.895 18.24 238.065 18.48 238.215C18.72 238.365 18.97 238.495 19.24 238.605C19.5 238.715 19.78 238.805 20.06 238.875L160.06 274.875C160.61 275.015 161.19 275.015 161.74 274.875L301.74 238.875C302.02 238.805 302.3 238.715 302.56 238.605C302.83 238.495 303.08 238.365 303.32 238.215C303.56 238.065 303.79 237.895 304 237.715C304.21 237.545 304.41 237.365 304.58 237.165C304.75 236.975 304.91 236.765 305.05 236.545C305.18 236.345 305.28 236.135 305.38 235.925C305.49 235.715 305.56 235.475 305.65 235.245C305.69 235.115 305.77 235.005 305.8 234.875V81.125Z"/>
+                </svg>
+            </a>
         </div>
-    </body>
+
+        <!-- Card -->
+        <div style="
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        ">
+            {{ $slot }}
+        </div>
+
+    </div>
+
+</body>
 </html>

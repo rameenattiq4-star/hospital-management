@@ -1,6 +1,6 @@
-@extends('layouts.app')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 
 <style>
     * { box-sizing: border-box; }
@@ -324,17 +324,17 @@
 
 <!-- ================= NAVBAR ================= -->
 <div class="navbar">
-    <a href="{{ url('hospital') }}" class="active">🏠 Dashboard</a>
-    <a href="{{ url('hospital/add') }}">➕ Add Hospital</a>
-    <a href="{{ url('has-one-through') }}">📍 Has One Through</a>
-    <a href="{{ url('has-many-through') }}">👨‍⚕️ Has Many Through</a>
+    <a href="<?php echo e(url('hospital')); ?>" class="active">🏠 Dashboard</a>
+    <a href="<?php echo e(url('hospital/add')); ?>">➕ Add Hospital</a>
+    <a href="<?php echo e(url('has-one-through')); ?>">📍 Has One Through</a>
+    <a href="<?php echo e(url('has-many-through')); ?>">👨‍⚕️ Has Many Through</a>
 </div>
 
 
 <!-- ================= MAIN CONTENT ================= -->
 <div class="main-container">
 
-    {{-- ✅ CACHE STATUS BOX — Ye proof hai ke cache chal raha hai --}}
+    
     <div class="cache-info">
         <div class="cache-info-left">
             <span class="cache-info-icon">⚡</span>
@@ -353,8 +353,8 @@
         </div>
     </div>
 
-    {{-- ✅ SESSION: Success Message (Flash) --}}
-    @if(session('success'))
+    
+    <?php if(session('success')): ?>
         <div style="
             background: #d1fae5;
             color: #065f46;
@@ -370,12 +370,12 @@
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
         ">
             <span style="font-size: 20px;">✅</span>
-            <span>{{ session('success') }}</span>
+            <span><?php echo e(session('success')); ?></span>
         </div>
-    @endif
+    <?php endif; ?>
 
-    {{-- ✅ SESSION: Error Message (Flash) --}}
-    @if(session('error'))
+    
+    <?php if(session('error')): ?>
         <div style="
             background: #fee2e2;
             color: #991b1b;
@@ -391,12 +391,12 @@
             box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
         ">
             <span style="font-size: 20px;">❌</span>
-            <span>{{ session('error') }}</span>
+            <span><?php echo e(session('error')); ?></span>
         </div>
-    @endif
+    <?php endif; ?>
 
-    {{-- ✅ SESSION: Last Visited Hospital --}}
-    @if(session('last_visited_hospital'))
+    
+    <?php if(session('last_visited_hospital')): ?>
         <div style="
             background: #eff6ff;
             color: #1e40af;
@@ -412,13 +412,13 @@
             box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
         ">
             <span style="font-size: 18px;">🕐</span>
-            <span>Last Visited: <strong>{{ session('last_visited_hospital.name') }}</strong></span>
-            <span style="color: #64748b; font-size: 12px;">({{ session('last_visited_hospital.time') }})</span>
+            <span>Last Visited: <strong><?php echo e(session('last_visited_hospital.name')); ?></strong></span>
+            <span style="color: #64748b; font-size: 12px;">(<?php echo e(session('last_visited_hospital.time')); ?>)</span>
         </div>
-    @endif
+    <?php endif; ?>
 
-    {{-- ✅ SEARCH FORM --}}
-    <form method="GET" action="{{ url('hospital') }}" style="
+    
+    <form method="GET" action="<?php echo e(url('hospital')); ?>" style="
         display: flex;
         gap: 10px;
         align-items: center;
@@ -432,7 +432,7 @@
         <input 
             type="text" 
             name="search" 
-            value="{{ $search ?? '' }}" 
+            value="<?php echo e($search ?? ''); ?>" 
             placeholder="🔍 Search hospital by name or email..."
             style="
                 flex: 1;
@@ -458,8 +458,8 @@
             🔍 Search
         </button>
 
-        @if($search ?? false)
-            <a href="{{ url('hospital') }}?clear=1" style="
+        <?php if($search ?? false): ?>
+            <a href="<?php echo e(url('hospital')); ?>?clear=1" style="
                 background: #f1f5f9;
                 color: #475569;
                 padding: 12px 22px;
@@ -470,14 +470,14 @@
             ">
                 ❌ Clear
             </a>
-        @endif
+        <?php endif; ?>
     </form>
 
-    @if($search ?? false)
+    <?php if($search ?? false): ?>
         <p style="margin: 0 0 20px 5px; color: #64748b; font-size: 13px;">
-            🔍 Searching for: <strong style="color: #0284c7;">{{ $search }}</strong>
+            🔍 Searching for: <strong style="color: #0284c7;"><?php echo e($search); ?></strong>
         </p>
-    @endif
+    <?php endif; ?>
 
 
     <!-- TOP STATS -->
@@ -485,31 +485,31 @@
 
     <div class="stats-grid-5">
         <div class="stat-card card-blue">
-            <h2>{{ $totalHospitals ?? $hospitals->total() ?? 0 }}</h2>
+            <h2><?php echo e($totalHospitals ?? $hospitals->total() ?? 0); ?></h2>
             <p>Total Hospitals</p>
             <div class="stat-icon">🏥</div>
         </div>
 
         <div class="stat-card card-green">
-            <h2>{{ $totalDoctors ?? 0 }}</h2>
+            <h2><?php echo e($totalDoctors ?? 0); ?></h2>
             <p>Total Doctors</p>
             <div class="stat-icon">👨‍⚕️</div>
         </div>
 
         <div class="stat-card card-pink">
-            <h2>{{ $totalDoctorScore ?? 0 }}</h2>
+            <h2><?php echo e($totalDoctorScore ?? 0); ?></h2>
             <p>Doctor Score Sum</p>
             <div class="stat-icon">📈</div>
         </div>
 
         <div class="stat-card card-orange">
-            <h2>{{ $avgDoctorScore ?? 0 }}</h2>
+            <h2><?php echo e($avgDoctorScore ?? 0); ?></h2>
             <p>Avg Doctor Score</p>
             <div class="stat-icon">📊</div>
         </div>
 
         <div class="stat-card card-purple">
-            <h2>{{ $maxDoctorScore ?? 0 }}</h2>
+            <h2><?php echo e($maxDoctorScore ?? 0); ?></h2>
             <p>Max Doctor Score</p>
             <div class="stat-icon">⬆️</div>
         </div>
@@ -529,21 +529,21 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($hospitals as $hospital)
+                <?php $__empty_1 = true; $__currentLoopData = $hospitals; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $hospital): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td class="student-name">{{ $hospital->name }}</td>
+                    <td><?php echo e($loop->iteration); ?></td>
+                    <td class="student-name"><?php echo e($hospital->name); ?></td>
                     <td class="text-right">
-                        <span class="circle-badge">{{ $hospital->doctors_count ?? 0 }}</span>
+                        <span class="circle-badge"><?php echo e($hospital->doctors_count ?? 0); ?></span>
                     </td>
                 </tr>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                     <td colspan="3" class="text-center" style="padding:30px; color:#94a3b8;">
                         No hospitals found!
                     </td>
                 </tr>
-                @endforelse
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
@@ -562,21 +562,21 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($hospitals as $hospital)
+                <?php $__empty_1 = true; $__currentLoopData = $hospitals; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $hospital): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td class="student-name">{{ $hospital->name }}</td>
+                    <td><?php echo e($loop->iteration); ?></td>
+                    <td class="student-name"><?php echo e($hospital->name); ?></td>
                     <td class="text-right">
-                        <span class="circle-badge">{{ $hospital->departments_count ?? 0 }}</span>
+                        <span class="circle-badge"><?php echo e($hospital->departments_count ?? 0); ?></span>
                     </td>
                 </tr>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                     <td colspan="3" class="text-center" style="padding:30px; color:#94a3b8;">
                         No data found!
                     </td>
                 </tr>
-                @endforelse
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
@@ -600,56 +600,58 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($hospitals as $hospital)
+                <?php $__empty_1 = true; $__currentLoopData = $hospitals; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $hospital): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td class="student-name">{{ $hospital->name }}</td>
+                    <td><?php echo e($loop->iteration); ?></td>
+                    <td class="student-name"><?php echo e($hospital->name); ?></td>
                     <td class="text-center">
-                        <span class="circle-badge">{{ $hospital->doctors_count ?? 0 }}</span>
+                        <span class="circle-badge"><?php echo e($hospital->doctors_count ?? 0); ?></span>
                     </td>
                     <td class="text-center">
-                        <strong>{{ $hospital->doctors_sum_score ?? 0 }}</strong>
+                        <strong><?php echo e($hospital->doctors_sum_score ?? 0); ?></strong>
                     </td>
                     <td class="text-center">
-                        <span class="badge badge-blue">{{ round($hospital->doctors_avg_score ?? 0, 1) }}</span>
+                        <span class="badge badge-blue"><?php echo e(round($hospital->doctors_avg_score ?? 0, 1)); ?></span>
                     </td>
                     <td class="text-center">
-                        <span class="badge badge-green">{{ $hospital->doctors_max_score ?? 0 }}</span>
+                        <span class="badge badge-green"><?php echo e($hospital->doctors_max_score ?? 0); ?></span>
                     </td>
                     <td class="text-center">
-                        <span class="badge badge-yellow">{{ $hospital->doctors_min_score ?? 0 }}</span>
+                        <span class="badge badge-yellow"><?php echo e($hospital->doctors_min_score ?? 0); ?></span>
                     </td>
                     <td class="text-center actions">
-                        @can('update', $hospital)
-                            <a href="{{ url('hospital/edit/' . $hospital->id) }}" title="Edit">✏️</a>
-                        @endcan
+                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('update', $hospital)): ?>
+                            <a href="<?php echo e(url('hospital/edit/' . $hospital->id)); ?>" title="Edit">✏️</a>
+                        <?php endif; ?>
 
-                        @can('delete', $hospital)
-                            <a href="{{ url('hospital/delete/' . $hospital->id) }}"
+                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('delete', $hospital)): ?>
+                            <a href="<?php echo e(url('hospital/delete/' . $hospital->id)); ?>"
                                title="Delete"
                                onclick="return confirm('Delete this hospital?')">🗑️</a>
-                        @endcan
+                        <?php endif; ?>
 
-                        @cannot('update', $hospital)
+                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->denies('update', $hospital)): ?>
                             <span style="color:#cbd5e1; font-size:12px;">🔒</span>
-                        @endcannot
+                        <?php endif; ?>
                     </td>
                 </tr>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                     <td colspan="8" class="text-center" style="padding:30px; color:#94a3b8;">
                         No data found!
                     </td>
                 </tr>
-                @endforelse
+                <?php endif; ?>
             </tbody>
         </table>
 
         <div style="margin-top:20px; text-align:center;">
-            {{ $hospitals->links() }}
+            <?php echo e($hospitals->links()); ?>
+
         </div>
     </div>
 
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\hospitalManagement\resources\views/hospital/app.blade.php ENDPATH**/ ?>
