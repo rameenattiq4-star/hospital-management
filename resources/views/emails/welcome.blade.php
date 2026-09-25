@@ -1,0 +1,1 @@
+<p>Welcome to Hospital Management System</p>

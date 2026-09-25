@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HospitalController;
 use App\Http\Controllers\DoctorsController;
+use App\Http\Controllers\MailController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -45,6 +47,10 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+Auth::routes(['verify' => true]);
+
 Route::get('/test-components', function () {
     return view('test-components');
 });
+
+Route::get('send-mail', [MailController::class, 'welcomeEmail']);

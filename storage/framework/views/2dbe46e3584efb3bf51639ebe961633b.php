@@ -1,0 +1,1 @@
+<p>Welcome to Hospital Management System</p><?php /**PATH C:\xampp\htdocs\hospitalManagement\resources\views/emails/welcome.blade.php ENDPATH**/ ?>

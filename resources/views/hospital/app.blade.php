@@ -1,6 +1,92 @@
 @extends('layouts.app')
 
 @section('content')
+@extends('layouts.app')
+
+@section('content')
+
+{{-- ✅ REAL-TIME NOTIFICATION AREA --}}
+<div id="notification-area" style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+"></div>
+
+<script type="module">
+    // ✅ Laravel Echo setup (Reverb)
+    import Echo from 'laravel-echo';
+    import Pusher from 'pusher-js';
+
+    window.Pusher = Pusher;
+
+    window.Echo = new Echo({
+        broadcaster: 'reverb',
+        key: import.meta.env.VITE_REVERB_APP_KEY,
+        wsHost: import.meta.env.VITE_REVERB_HOST,
+        wsPort: import.meta.env.VITE_REVERB_PORT ?? 80,
+        wssPort: import.meta.env.VITE_REVERB_PORT ?? 443,
+        forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
+        enabledTransports: ['ws', 'wss'],
+    });
+
+    // ✅ Channel sunna
+    Echo.channel('hospitals')
+        .listen('.hospital.added', (data) => {
+            console.log('🏥 New Hospital Added:', data);
+            showNotification(data);
+        });
+
+    function showNotification(data) {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            color: white;
+            padding: 18px 24px;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(2, 132, 199, 0.4);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-width: 340px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            animation: slideIn 0.4s ease-out;
+            border-left: 6px solid #10b981;
+        `;
+
+        notification.innerHTML = `
+            <span style="font-size: 32px;">🏥</span>
+            <div style="flex: 1;">
+                <div style="font-weight: 800; font-size: 14px; margin-bottom: 4px;">New Hospital Added!</div>
+                <div style="font-size: 13px; opacity: 0.95; font-weight: 600;">${data.name}</div>
+                <div style="font-size: 11px; opacity: 0.75; margin-top: 4px;">Score: ${data.score}% · ${data.time}</div>
+            </div>
+        `;
+
+        document.getElementById('notification-area').appendChild(notification);
+
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease-in';
+            setTimeout(() => notification.remove(), 300);
+        }, 5000);
+    }
+</script>
+
+<style>
+    @keyframes slideIn {
+        from { transform: translateX(450px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(450px); opacity: 0; }
+    }
+</style>
+
+{{-- Baaki content same rahega — Cache box, Search, Stats, Tables --}}
 
 <style>
     * { box-sizing: border-box; }
